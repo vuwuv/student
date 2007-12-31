@@ -202,7 +202,7 @@ namespace Console2
                     if (previous != null) previous.Next = current;
                     if (first == null) first = current;
                     previous = current;   
-                    this.count++;
+                    this.count++;   
                 }
                 current = current.Next;
             }
