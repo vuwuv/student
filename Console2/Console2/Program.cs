@@ -262,7 +262,21 @@ namespace Console2
 
             }
             while (modified);
+        }
 
+        public void Sort(Comparison<T> comparison)
+        {
+            this.Sort(0, this.count, new FunctionalComparer<T>((T1, T2) => comparison(T1, T2));
+        }
+
+        public void Sort(IComparer<T> comparer)
+        {
+            this.Sort(0, this.count, comparer);
+        }
+
+        public void Sort()
+        {
+            this.Sort(0, this.count, Comparer<T>.Default);
         }
     }
 
@@ -281,7 +295,8 @@ namespace Console2
             //a.RemoveRange(6, 3);
             a.RemoveAll(element => element >= 1);
             List<int> aa = new List<int>(); 
-            aa.Sort()
+            
+            
             
             foreach(int e in a)
             {
