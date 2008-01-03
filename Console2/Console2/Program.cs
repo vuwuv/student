@@ -211,6 +211,59 @@ namespace Console2
             if(previous != null) previous.Next = null;
             this.last = previous;
         }
+
+        public void RemoveAt(int index)
+        {
+            this.RemoveRange(index, 1);
+        }
+
+        private class FunctionalComparer<T> : IComparer<T>
+        {
+            private Func<T, T, int> comparer;
+            public FunctionalComparer(Func<T,T,int> comparer)
+            {
+                this.comparer = comparer;
+            }
+            public static IComparer<T> Create(Func<T, T, int> comparer)
+                {
+                return new FunctionalComparer<T>(comparer);
+                }
+            public int Compare(T x, T y)
+            {
+                return comparer(x, y);
+            }
+
+        }
+
+        public void Sort(int index, int count, IComparer<T> comparer)
+        {
+            if (index < 0) throw new Exception("Bad index");
+            if (index + count > this.count) throw new Exception("Bad index");
+            Block first = GetBlock(index);
+            bool modified = false;
+
+            do
+            {
+                int i = index;
+                Block current = first;
+                while(i < index + count - 1)
+                {
+                    int result = comparer.Compare(current.Data, current.Next.Data);
+                    if (result > 0) 
+                    {
+                        T temp = current.Data;
+                        current.Data = current.Next.Data;
+                        current.Next.Data = temp;
+                        modified = true;
+                    }
+                    current = current.Next;
+                    i++;
+                }
+
+            }
+            while (modified);
+
+        }
     }
 
 
@@ -227,6 +280,9 @@ namespace Console2
             LinkedList<int> a = new LinkedList<int>(new int[] {1, 5, 7, 6, 5, 6, 8 });
             //a.RemoveRange(6, 3);
             a.RemoveAll(element => element >= 1);
+            List<int> aa = new List<int>(); 
+            aa.Sort()
+            
             foreach(int e in a)
             {
                 Console.WriteLine(e);
